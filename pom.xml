@@ -36,8 +36,23 @@
             </plugin>
         </plugins>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${maven-surefire-report-plugin}</version>
+            </plugin>
+        </plugins>
+    </reporting>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <version>${maven-surefire-report-plugin}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
@@ -83,18 +98,17 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>${junit-platform-launcher}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-api</artifactId>
+            <version>${junit-platform-launcher}</version>
         </dependency>
     </dependencies>
 
     <properties>
-        <junit-jupiter>5.9.0</junit-jupiter>
+        <maven-surefire-report-plugin>3.0.0</maven-surefire-report-plugin>
+        <junit-jupiter>5.9.2</junit-jupiter>
         <junit-platform-launcher>1.9.0</junit-platform-launcher>
         <junit-platform-suite-engine>1.8.1</junit-platform-suite-engine>
         <log4j>2.17.2</log4j>
@@ -103,7 +117,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <runSuite>**/JUnit5TestRunner.class</runSuite>
+        <runSuite>**/DeploymentValidation.class</runSuite>
     </properties>
     
 </project>
