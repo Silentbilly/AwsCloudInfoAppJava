@@ -78,6 +78,17 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j}</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>${json-schema-validator}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -98,17 +109,31 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>${junit-platform-launcher}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-suite-api</artifactId>
-            <version>${junit-platform-launcher}</version>
+            <artifactId>junit-platform-suite-engine</artifactId>
+            <version>${junit-platform-suite-engine}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson-core}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-core}</version>
         </dependency>
     </dependencies>
 
     <properties>
+        <jackson-core>2.14.2</jackson-core>
+        <json-schema-validator>4.3.3</json-schema-validator>
+        <rest-assured>5.3.0</rest-assured>
         <maven-surefire-report-plugin>3.0.0</maven-surefire-report-plugin>
-        <junit-jupiter>5.9.2</junit-jupiter>
+        <junit-jupiter>5.9.0</junit-jupiter>
         <junit-platform-launcher>1.9.0</junit-platform-launcher>
         <junit-platform-suite-engine>1.8.1</junit-platform-suite-engine>
         <log4j>2.17.2</log4j>

@@ -4,7 +4,7 @@ import com.epam.cloudx.utils.AwsUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetEc2Instances extends BaseTest {
+public class GetEc2InstancesTest extends BaseTest {
     private static final String PUBLIC_INSTANCE_NAME = "cloudxinfo/PublicInstance/Instance";
 
     @Test

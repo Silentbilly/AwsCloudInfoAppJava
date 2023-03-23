@@ -7,8 +7,6 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Reservation;
-import java.util.List;
-import jdk.jfr.RecordingState;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -16,8 +14,8 @@ import lombok.experimental.UtilityClass;
 public class AwsUtils {
 
   public static AmazonEC2 createEc2Client(String accessKey, String secretKey) {
-    BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-    Regions region = Regions.EU_CENTRAL_1;
+    var credentials = new BasicAWSCredentials(accessKey, secretKey);
+    var region = Regions.EU_CENTRAL_1;
     return AmazonEC2ClientBuilder.standard()
         .withCredentials(new AWSStaticCredentialsProvider(credentials))
         .withRegion(region)
@@ -27,7 +25,7 @@ public class AwsUtils {
   @SneakyThrows
   public static Instance getReservationByName(String name, AmazonEC2 ec2) {
     // Filter reservations by name
-    List<Reservation> reservations = ec2.describeInstances().getReservations().stream()
+    var reservations = ec2.describeInstances().getReservations().stream()
         .filter(s -> s.getInstances().toString().contains(name)).toList();
 
     // Find first. If more than 1, throw exception
