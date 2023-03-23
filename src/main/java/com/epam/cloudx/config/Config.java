@@ -1,6 +1,7 @@
 package com.epam.cloudx.config;
 
 import static com.epam.cloudx.config.Constants.ACCESS_KEY;
+import static com.epam.cloudx.config.Constants.API_URL;
 import static com.epam.cloudx.config.Constants.SECRET_KEY;
 
 import java.io.InputStream;
@@ -32,6 +33,9 @@ public class Config {
   }
   public String getSecretKey() {
     return props.getProperty(SECRET_KEY);
+  }
+  public String getHomeUrl() {
+    return props.getProperty(API_URL);
   }
 
   @SneakyThrows
