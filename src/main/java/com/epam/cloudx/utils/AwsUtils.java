@@ -1,6 +1,10 @@
 package com.epam.cloudx.utils;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2;
+import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.Reservation;
 import java.util.List;
 import lombok.SneakyThrows;
@@ -22,5 +26,14 @@ public class AwsUtils {
         throw new Exception("Duplication of names in EC2. Create unique name");
       }
       return reservation.getInstances().get(0).getState().getName();
+    }
+
+    public static AmazonEC2 createEc2Client(String accessKey, String secretKey) {
+      BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+      Regions region = Regions.EU_CENTRAL_1;
+      return AmazonEC2ClientBuilder.standard()
+          .withCredentials(new AWSStaticCredentialsProvider(credentials))
+          .withRegion(region)
+          .build();
     }
 }
