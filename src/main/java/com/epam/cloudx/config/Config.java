@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j;
 
 //@Log4j
 public class Config {
@@ -31,11 +30,9 @@ public class Config {
   public String getAccessKey() {
     return props.getProperty(ACCESS_KEY);
   }
+
   public String getSecretKey() {
     return props.getProperty(SECRET_KEY);
-  }
-  public String getHomeUrl() {
-    return props.getProperty(API_URL);
   }
 
   @SneakyThrows
