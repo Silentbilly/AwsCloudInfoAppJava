@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.deploymentValidation;
+package com.epam.cloudx.tests;
 
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.epam.cloudx.config.Config;

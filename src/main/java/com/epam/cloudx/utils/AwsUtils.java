@@ -7,6 +7,8 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Reservation;
+import com.epam.cloudx.Exceptions.DuplicationInstanceNameException;
+import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -33,7 +35,7 @@ public class AwsUtils {
     if (reservations.size() == 1) {
       reservation = reservations.get(0);
     } else {
-      throw new Exception("Duplication of names in EC2. Create unique name");
+      throw new DuplicationInstanceNameException("Duplication of names in EC2. Create unique name");
     }
     return reservation.getInstances().get(0);
   }
@@ -42,7 +44,21 @@ public class AwsUtils {
     return getReservationByName(name, ec2).getState().getName();
   }
 
+  @SneakyThrows
   public static String getPublicIpAddressByName(String name, AmazonEC2 ec2) {
-    return getReservationByName(name, ec2).getPublicIpAddress();
+    if(getReservationByName(name, ec2).getPublicIpAddress() != null) {
+      return getReservationByName(name, ec2).getPublicIpAddress();
+    } else {
+      throw new ServiceUnavailableFromPublicException("Public IP is empty. Instance is not accessible from internet");
+    }
+  }
+
+  @SneakyThrows
+  public static String getPrivateIpAddressByName(String name, AmazonEC2 ec2) {
+    if(getReservationByName(name, ec2).getPublicIpAddress() != null) {
+      return getReservationByName(name, ec2).getPrivateIpAddress();
+    } else {
+      throw new ServiceUnavailableFromPublicException("Private IP is empty. Instance is not accessible from internet");
+    }
   }
 }
