@@ -7,11 +7,11 @@ import java.io.File;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetApiTest {
+public class GetApiPublicTest extends PublicInstanceTest {
   @Test
   public void getApiForPublicInstance() {
     var file = new File("src/main/resources/data/appInfoPublic.json");
-    var response = HttpUtils.getAppInfo();
+    var response = HttpUtils.getAppInfo(publicInstanceName, ec2);
     var actualResponse = JsonUtils.readJsonAsObject(response, AppInfo.class);
     var expectedResponse = JsonUtils.readJsonFileAsObject(file, AppInfo.class);
     Assertions.assertEquals(actualResponse, expectedResponse);

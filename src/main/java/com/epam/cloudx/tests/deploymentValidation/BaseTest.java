@@ -6,5 +6,5 @@ import com.epam.cloudx.utils.AwsUtils;
 
 public class BaseTest {
   private static final Config INSTANCE = Config.getInstance();
-  AmazonEC2 ec2 = AwsUtils.createEc2Client(INSTANCE.getAccessKey(), INSTANCE.getSecretKey());
+  protected AmazonEC2 ec2 = AwsUtils.createEc2Client(INSTANCE.getAccessKey(), INSTANCE.getSecretKey());
 }
