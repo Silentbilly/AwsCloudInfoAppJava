@@ -1,8 +1,6 @@
 package com.epam.cloudx.tests.privateInstanceTests;
 
 import com.epam.cloudx.tests.BaseTest;
-import com.epam.cloudx.tests.PrivateInstanceTest;
-import com.epam.cloudx.tests.PublicInstanceTest;
 import com.epam.cloudx.utils.AwsUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
