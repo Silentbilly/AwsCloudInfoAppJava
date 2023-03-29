@@ -74,8 +74,8 @@
             <version>${lombok.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
             <version>${log4j}</version>
         </dependency>
 
@@ -141,6 +141,16 @@
             <artifactId>ec2</artifactId>
             <version>${aws-cdk}</version>
         </dependency>
+        <dependency>
+            <groupId>com.sshtools</groupId>
+            <artifactId>maverick-base</artifactId>
+            <version>3.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sshtools</groupId>
+            <artifactId>maverick-synergy-client</artifactId>
+            <version>3.0.10</version>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -153,7 +163,7 @@
         <junit-jupiter>5.9.0</junit-jupiter>
         <junit-platform-launcher>1.9.0</junit-platform-launcher>
         <junit-platform-suite-engine>1.8.1</junit-platform-suite-engine>
-        <log4j>2.17.2</log4j>
+        <log4j>1.2.17</log4j>
         <aws-java-sdk>1.12.429</aws-java-sdk>
         <lombok.version>1.18.26</lombok.version>
         <maven.compiler.source>17</maven.compiler.source>
