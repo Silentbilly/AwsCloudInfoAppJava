@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.privateInstanceTests;
+package com.epam.cloudx.tests.ec2.securityGroupsConfigurationsTests;
 
 import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
 import com.epam.cloudx.tests.BaseTest;
