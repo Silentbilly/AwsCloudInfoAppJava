@@ -5,18 +5,14 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
-import com.amazonaws.services.ec2.model.GroupIdentifier;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.epam.cloudx.Exceptions.DuplicationInstanceNameException;
 import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
-import com.sshtools.client.SshClient;
+/*import com.sshtools.client.SshClient;
 import com.sshtools.common.publickey.SshKeyUtils;
 import com.sshtools.common.ssh.SshException;
-import com.sshtools.common.ssh.components.SshKeyPair;
+import com.sshtools.common.ssh.components.SshKeyPair;*/
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j;
@@ -26,7 +22,6 @@ import java.io.File;
 @Log4j
 @UtilityClass
 public class AwsUtils {
-
     public static AmazonEC2 createEc2Client(String accessKey, String secretKey) {
         var credentials = new BasicAWSCredentials(accessKey, secretKey);
         var region = Regions.EU_CENTRAL_1;
