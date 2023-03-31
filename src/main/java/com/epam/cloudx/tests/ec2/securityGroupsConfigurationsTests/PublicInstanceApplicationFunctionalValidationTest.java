@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.publicInstanceTests;
+package com.epam.cloudx.tests.ec2.securityGroupsConfigurationsTests;
 
 import com.epam.cloudx.objects.AppInfo;
 import com.epam.cloudx.tests.BaseTest;

@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.publicInstanceTests;
+package com.epam.cloudx.tests.ec2.smokeTests;
 
 import com.epam.cloudx.tests.BaseTest;
 import com.epam.cloudx.utils.AwsUtils;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class PublicInstanceAvailableFromInternetTest extends BaseTest {
+public class PublicInstanceRunningTest extends BaseTest {
     @Test
     @DisplayName("Public instance is running")
     @Tag("public")

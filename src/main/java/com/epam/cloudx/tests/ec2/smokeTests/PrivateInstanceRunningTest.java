@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.privateInstanceTests;
+package com.epam.cloudx.tests.ec2.smokeTests;
 
 import com.epam.cloudx.tests.BaseTest;
 import com.epam.cloudx.utils.AwsUtils;
