@@ -1,7 +1,5 @@
 package com.epam.cloudx.utils;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
