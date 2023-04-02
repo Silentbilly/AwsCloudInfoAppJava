@@ -13,7 +13,7 @@ public class PublicInstanceRunningTest extends BaseTest {
     @Tag("public")
     public void isInstanceRunning() {
         final String expectedState = "running";
-        final String actualState = AwsUtils.getInstanceStateByName(publicInstanceName, ec2);
+        final String actualState = AwsUtils.getInstanceStateByName(ec2, publicInstanceName);
 
         Assertions.assertEquals(actualState, expectedState,
                 String.format("Actual instance state is %s.", actualState));

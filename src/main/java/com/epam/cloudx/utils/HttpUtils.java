@@ -9,10 +9,10 @@ import io.restassured.response.Response;
 @UtilityClass
 public class HttpUtils {
   private final String HTTP = "http://";
-  public static Response getPublicAppInfo(String instanceName, AmazonEC2 ec2) {
+  public static Response getPublicAppInfo(AmazonEC2 ec2, String instanceName) {
     return given().relaxedHTTPSValidation()
         .log().all()
-        .baseUri(HTTP + AwsUtils.getPublicIpAddressByName(instanceName, ec2))
+        .baseUri(HTTP + AwsUtils.getPublicIpAddressByName(ec2, instanceName))
         .when()
         .get()
         .then()
@@ -21,10 +21,10 @@ public class HttpUtils {
         .response();
   }
 
-  public static Response getPrivateAppInfo(String instanceName, AmazonEC2 ec2) {
+  public static Response getPrivateAppInfo(AmazonEC2 ec2, String instanceName) {
     return given().relaxedHTTPSValidation()
         .log().all()
-        .baseUri(HTTP + AwsUtils.getPrivateIpAddressByName(instanceName, ec2))
+        .baseUri(HTTP + AwsUtils.getPrivateIpAddressByName(ec2, instanceName))
         .when()
         .get()
         .then()

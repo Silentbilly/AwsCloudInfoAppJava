@@ -14,6 +14,6 @@ public class PrivateInstanceApiIsNotAvailableFromInternetTest extends BaseTest {
     @Tag("private")
     public void getApiForPrivateInstance() {
         Assertions.assertThrows(ServiceUnavailableFromPublicException.class,
-                () -> HttpUtils.getPrivateAppInfo(privateInstanceName, ec2));
+                () -> HttpUtils.getPrivateAppInfo(ec2, privateInstanceName));
     }
 }

@@ -1,6 +1,8 @@
 package com.epam.cloudx.Exceptions;
 
-public class ServiceUnavailableFromPublicException extends Exception {
+import java.net.UnknownHostException;
+
+public class ServiceUnavailableFromPublicException extends UnknownHostException {
 
   public ServiceUnavailableFromPublicException(String message) {
     super(message);

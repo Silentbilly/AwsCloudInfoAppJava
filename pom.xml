@@ -46,11 +46,6 @@
       <version>${aws-java-sdk}</version>
     </dependency>
     <dependency>
-      <groupId>com.amazonaws</groupId>
-      <artifactId>aws-java-sdk-ec2</artifactId>
-      <version>${aws-java-sdk}</version>
-    </dependency>
-    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
@@ -123,6 +118,12 @@
       <version>${aws-cdk}</version>
     </dependency>
     <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-bom</artifactId>
+      <version>1.12.435</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
       <groupId>com.epam.reportportal</groupId>
       <artifactId>agent-java-testng</artifactId>
       <version>${report-portal}</version>
@@ -164,7 +165,7 @@
     <junit-platform-launcher>1.9.2</junit-platform-launcher>
     <junit-platform-suite-engine>1.9.2</junit-platform-suite-engine>
     <log4j>1.2.17</log4j>
-    <aws-java-sdk>1.12.429</aws-java-sdk>
+    <aws-java-sdk>1.12.439</aws-java-sdk>
     <lombok.version>1.18.26</lombok.version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
