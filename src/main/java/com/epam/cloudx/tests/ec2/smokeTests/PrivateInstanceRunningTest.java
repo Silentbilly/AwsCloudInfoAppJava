@@ -11,6 +11,7 @@ public class PrivateInstanceRunningTest extends BaseTest {
     @Test
     @DisplayName("Private instance is running")
     @Tag("private")
+    @Tag("smoke")
     public void isInstanceRunning() {
         final String expectedState = "running";
         final String actualState = AwsUtils.getInstanceStateByName(ec2, privateInstanceName);
