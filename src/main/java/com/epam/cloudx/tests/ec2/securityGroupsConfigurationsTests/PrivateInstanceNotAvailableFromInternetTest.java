@@ -14,6 +14,6 @@ public class PrivateInstanceNotAvailableFromInternetTest extends BaseTest {
     @Tag("private")
     public void privateInstanceIsNotAvailableFromInternet() {
         Assertions.assertThrows(ServiceUnavailableFromPublicException.class,
-                () -> AwsUtils.getPublicIpAddressByName(privateInstanceName, ec2));
+                () -> AwsUtils.getPublicIpAddressByName(ec2, privateInstanceName));
     }
 }
