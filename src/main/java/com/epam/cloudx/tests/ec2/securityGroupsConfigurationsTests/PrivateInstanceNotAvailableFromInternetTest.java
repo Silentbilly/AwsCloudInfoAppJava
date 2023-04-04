@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.privateInstanceTests;
+package com.epam.cloudx.tests.ec2.securityGroupsConfigurationsTests;
 
 import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
 import com.epam.cloudx.tests.BaseTest;
@@ -14,6 +14,6 @@ public class PrivateInstanceNotAvailableFromInternetTest extends BaseTest {
     @Tag("private")
     public void privateInstanceIsNotAvailableFromInternet() {
         Assertions.assertThrows(ServiceUnavailableFromPublicException.class,
-                () -> AwsUtils.getPublicIpAddressByName(privateInstanceName, ec2));
+                () -> AwsUtils.getPublicIpAddressByName(ec2, privateInstanceName));
     }
 }

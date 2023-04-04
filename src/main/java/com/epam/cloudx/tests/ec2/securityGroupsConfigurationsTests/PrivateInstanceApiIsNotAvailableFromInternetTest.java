@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.privateInstanceTests;
+package com.epam.cloudx.tests.ec2.securityGroupsConfigurationsTests;
 
 import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
 import com.epam.cloudx.tests.BaseTest;
@@ -14,6 +14,6 @@ public class PrivateInstanceApiIsNotAvailableFromInternetTest extends BaseTest {
     @Tag("private")
     public void getApiForPrivateInstance() {
         Assertions.assertThrows(ServiceUnavailableFromPublicException.class,
-                () -> HttpUtils.getPrivateAppInfo(privateInstanceName, ec2));
+                () -> HttpUtils.getPrivateAppInfo(ec2, privateInstanceName));
     }
 }

@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.publicInstanceTests;
+package com.epam.cloudx.tests.ec2.securityGroupsConfigurationsTests;
 
 import com.epam.cloudx.objects.AppInfo;
 import com.epam.cloudx.tests.BaseTest;
@@ -18,7 +18,7 @@ public class PublicInstanceApplicationFunctionalValidationTest extends BaseTest 
   @Tag("public")
   public void getApiForPublicInstance() {
     var file = new File("src/main/resources/data/json/appInfoPublic.json");
-    var response = HttpUtils.getPublicAppInfo(publicInstanceName, ec2);
+    var response = HttpUtils.getPublicAppInfo(ec2, publicInstanceName);
     var actualResponse = JsonUtils.readJsonAsObject(response, AppInfo.class);
     var expectedResponse = JsonUtils.readJsonFileAsObject(file, AppInfo.class);
     Assertions.assertEquals(actualResponse, expectedResponse);

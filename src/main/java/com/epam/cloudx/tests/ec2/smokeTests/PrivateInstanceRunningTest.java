@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.privateInstanceTests;
+package com.epam.cloudx.tests.ec2.smokeTests;
 
 import com.epam.cloudx.tests.BaseTest;
 import com.epam.cloudx.utils.AwsUtils;
@@ -11,9 +11,10 @@ public class PrivateInstanceRunningTest extends BaseTest {
     @Test
     @DisplayName("Private instance is running")
     @Tag("private")
+    @Tag("smoke")
     public void isInstanceRunning() {
         final String expectedState = "running";
-        final String actualState = AwsUtils.getInstanceStateByName(privateInstanceName, ec2);
+        final String actualState = AwsUtils.getInstanceStateByName(ec2, privateInstanceName);
 
         Assertions.assertEquals(actualState, expectedState, String.format("Actual instance state is %s.", actualState));
     }
