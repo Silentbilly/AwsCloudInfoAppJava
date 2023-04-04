@@ -7,6 +7,7 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Reservation;
+import com.amazonaws.services.ec2.model.Subnet;
 import com.amazonaws.services.ec2.model.Tag;
 import com.amazonaws.services.ec2.model.Volume;
 import com.epam.cloudx.Exceptions.DuplicationInstanceNameException;
@@ -28,7 +29,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j;
 
-import java.io.File;
+import com.amazonaws.services.ec2.model.Vpc;
 
 @Log4j
 @UtilityClass
@@ -89,7 +90,7 @@ public class AwsUtils {
     }
   }
 
-  public static boolean isTagsPresent(Instance instance, List<String> tags) {
+  public static boolean isEc2TagsPresent(Instance instance, List<String> tags) {
     return new HashSet<>(instance.getTags()
         .stream()
         .map(Tag::getKey)
@@ -112,13 +113,69 @@ public class AwsUtils {
     }
   }
 
-  public boolean isInstanceHasPublicIp(AmazonEC2 ec2, String instanceName) {
+  public static boolean isInstanceHasPublicIp(AmazonEC2 ec2, String instanceName) {
     try {
       String address = AwsUtils.getPublicIpAddressByName(ec2, instanceName);
       InetAddress inetAddress = InetAddress.getByName(address);
       return inetAddress instanceof Inet4Address || inetAddress instanceof Inet6Address;
     } catch (UnknownHostException e) {
       return false;
+    }
+  }
+
+  public static Vpc getVpcByName(AmazonEC2 ec2, String vpcName) {
+    // Retrieve information about all VPCs in your account
+    List<Vpc> vpcList = ec2.describeVpcs().getVpcs();
+    Vpc vpc = vpcList
+        .stream()
+        .filter(Objects::nonNull)
+        .filter(s -> s.toString().contains(vpcName)).findAny()
+        .orElse(null);
+    if (vpc != null) {
+      return vpc;
+    } else {
+      throw new NoSuchElementException("No such vpc: " + vpcName);
+    }
+  }
+
+  public static boolean isVpcDefaultByName(AmazonEC2 ec2, String vpcName) {
+    return getVpcByName(ec2, vpcName).isDefault();
+  }
+
+  public static boolean isVpcTagsPresent(AmazonEC2 ec2, String vpcName, List<String> tags) {
+    return new HashSet<>(AwsUtils.getVpcByName(ec2, vpcName).getTags()
+        .stream()
+        .map(Tag::getKey)
+        .toList()).containsAll(tags);
+  }
+
+  public static Subnet getSubnetByName(AmazonEC2 ec2, String vpcSubnetName) {
+    List<Subnet> subnets = ec2.describeSubnets().getSubnets();
+    Subnet subnet = subnets
+        .stream()
+        .filter(Objects::nonNull)
+        .filter(s -> s.toString().contains(vpcSubnetName))
+        .findAny()
+        .orElse(null);
+    if (subnet != null) {
+      return subnet;
+    } else {
+      throw new NoSuchElementException(String.format("The vpc doesn't have subnet %s", vpcSubnetName));
+    }
+  }
+
+  public static String getVpcSubnetTypeByName(AmazonEC2 ec2, String vpcSubnetName) {
+    Subnet subnet = getSubnetByName(ec2, vpcSubnetName);
+    Tag subnetTypeTag = subnet.getTags()
+        .stream()
+        .filter(Objects::nonNull)
+        .filter(s -> s.getKey().contains("subnet-type"))
+        .findAny()
+        .orElse(null);
+    if (subnetTypeTag != null) {
+      return subnetTypeTag.getValue();
+    } else {
+      throw new NoSuchElementException(String.format("The subnet tags of %s are empty", vpcSubnetName));
     }
   }
 
