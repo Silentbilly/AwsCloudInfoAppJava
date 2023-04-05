@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static software.amazon.awscdk.services.ec2.InstanceClass.T2;
-import static software.amazon.awscdk.services.ec2.InstanceSize.MICRO;
+import static software.amazon.awssdk.services.ec2.model.UnlimitedSupportedInstanceFamily.T2;
 
-import com.amazonaws.services.ec2.model.Instance;
 import com.epam.cloudx.tests.BaseTest;
 import com.epam.cloudx.utils.AwsUtils;
 import java.util.ArrayList;
@@ -17,6 +15,7 @@ import lombok.extern.log4j.Log4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import software.amazon.awssdk.services.ec2.model.Instance;
 
 /**
  * Each EC2 instance should have the following configuration:
@@ -33,7 +32,7 @@ public class ConfigurationTest extends BaseTest {
 
   private final Instance publicInstance = AwsUtils.getInstanceByName(ec2, publicInstanceName);
   private final Instance privateInstance = AwsUtils.getInstanceByName(ec2, privateInstanceName);
-  private final String expectedInstancetype = String.format("%s.%s", T2, MICRO).toLowerCase();
+  private final String expectedInstancetype = String.format("%s.micro", T2).toLowerCase();
   private final List<String> expectedTagsList = new ArrayList<>(Arrays.asList(appTags));
   private static final Integer EXPECTED_DEVICE_SIZE = 8;
   private static final String EXPECTED_OS = "Linux/UNIX";
@@ -43,10 +42,10 @@ public class ConfigurationTest extends BaseTest {
   @DisplayName("Public EC2 instance should have the following configuration")
   @Tag("configuration")
   public void checkPublicInstanceType() {
-    String actualInstanceType = publicInstance.getInstanceType();
+    String actualInstanceType = publicInstance.instanceType().toString();
     boolean isExpectedTagsPresent = AwsUtils.isEc2TagsPresent(publicInstance, expectedTagsList);
     Integer actualDeviceSize = AwsUtils.getVolumeSizeByInstanceName(ec2, publicInstanceName);
-    String actualOs = publicInstance.getPlatformDetails();
+    String actualOs = publicInstance.platformDetails();
     boolean isInstanceHavePublicIpAddress = AwsUtils.isInstanceHasPublicIp(ec2, publicInstanceName);
 
     log.info("Verifying public instance configuration");
@@ -64,10 +63,10 @@ public class ConfigurationTest extends BaseTest {
   @DisplayName("Private EC2 instance should have the following configuration")
   @Tag("configuration")
   public void checkPrivateInstanceType() {
-    String actualInstanceType = privateInstance.getInstanceType();
+    String actualInstanceType = privateInstance.instanceType().toString();
     boolean isExpectedTagsPresent = AwsUtils.isEc2TagsPresent(privateInstance, expectedTagsList);
     Integer actualDeviceSize = AwsUtils.getVolumeSizeByInstanceName(ec2, privateInstanceName);
-    String actualOs = privateInstance.getPlatformDetails();
+    String actualOs = privateInstance.platformDetails();
     boolean isInstanceHavePublicIpAddress = AwsUtils.isInstanceHasPublicIp(ec2, privateInstanceName);
 
     log.info("Verifying private instance configuration");
