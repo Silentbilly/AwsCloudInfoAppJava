@@ -1,10 +1,10 @@
 package com.epam.cloudx.tests;
 
-import com.amazonaws.services.ec2.AmazonEC2;
 import com.epam.cloudx.config.Config;
 import com.epam.cloudx.utils.AwsUtils;
 import com.epam.reportportal.junit5.ReportPortalExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import software.amazon.awssdk.services.ec2.Ec2Client;
 
 @ExtendWith(ReportPortalExtension.class)
 public class BaseTest {
@@ -19,5 +19,5 @@ public class BaseTest {
 
   protected final String PERMISSIONS_FILE_PATH = "resources/data/keys/cloudxinfo-eu-central-1.pem";
 
-  protected AmazonEC2 ec2 = AwsUtils.createEc2Client(INSTANCE.getAccessKey(), INSTANCE.getSecretKey());
+  protected Ec2Client ec2 = AwsUtils.createEc2Client(INSTANCE.getAccessKey(), INSTANCE.getSecretKey());
 }

@@ -5,12 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.amazonaws.services.ec2.model.DescribeRouteTablesRequest;
+import com.amazonaws.services.ec2.model.DescribeRouteTablesResult;
+import com.amazonaws.services.ec2.model.Filter;
+import com.amazonaws.services.ec2.model.Route;
+import com.amazonaws.services.ec2.model.RouteTable;
 import com.epam.cloudx.tests.BaseTest;
 import com.epam.cloudx.utils.AwsUtils;
-import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +45,7 @@ public class VpcConfigurationTest extends BaseTest {
   @Tag("smoke")
   @Order(1)
   public void nonDefaultVpcTest() {
-    String actualVpcCidrBlock = AwsUtils.getVpcByName(ec2, vpcName).getCidrBlock();
+    String actualVpcCidrBlock = AwsUtils.getVpcByName(ec2, vpcName).cidrBlock();
     boolean isVpcContainTags = AwsUtils.isVpcTagsPresent(ec2, vpcName, expectedTagsList);
 
     log.info("Verifying non-default VOC, CIDR block, VPC tags");
@@ -63,9 +69,11 @@ public class VpcConfigurationTest extends BaseTest {
     log.info("Verifying of type for public and private subnet");
     assertAll(
         () -> assertEquals(EXPECTED_PUBLIC_VPC_SUBNET_TYPE, actualPublicVpcSubnetType,
-            String.format("The type of %s instance should be %s", publicVpcSubnetName, EXPECTED_PRIVATE_VPC_SUBNET_TYPE)),
+            String.format("The type of %s instance should be %s", publicVpcSubnetName,
+                EXPECTED_PRIVATE_VPC_SUBNET_TYPE)),
         () -> assertEquals(EXPECTED_PRIVATE_VPC_SUBNET_TYPE, actualPrivateVpcSubnetType,
-            String.format("The type of %s instance should be %s", privateVpcSubnetName, EXPECTED_PRIVATE_VPC_SUBNET_TYPE))
+            String.format("The type of %s instance should be %s", privateVpcSubnetName,
+                EXPECTED_PRIVATE_VPC_SUBNET_TYPE))
     );
   }
 }
