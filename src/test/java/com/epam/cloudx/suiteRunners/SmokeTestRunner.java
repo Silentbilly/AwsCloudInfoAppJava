@@ -1,4 +1,4 @@
-package suiteRunners;
+package com.epam.cloudx.suiteRunners;
 
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectPackages;
