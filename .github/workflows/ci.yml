@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,5 +26,10 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Run tests with Maven
         run: mvn test -Daws.accessKeyId=$AWS_ACCESS_KEY_ID -Daws.secretAccessKey=$AWS_SECRET_ACCESS_KEY
