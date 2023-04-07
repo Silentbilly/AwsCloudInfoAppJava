@@ -1,5 +1,9 @@
 name: CI
 
+variables:
+  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  
 on:
   push:
     branches:
@@ -23,5 +27,4 @@ jobs:
         run: mvn clean
 
       - name: Run tests with Maven
-        run: mvn clean test
-
+        run: -Daws.accessKeyId=$AWS_ACCESS_KEY_ID -Daws.secretAccessKey=$AWS_SECRET_ACCESS_KEY test
