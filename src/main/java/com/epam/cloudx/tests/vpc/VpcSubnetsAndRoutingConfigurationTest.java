@@ -13,6 +13,15 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 
+/**
+ * Subnets and routing configuration:
+
+ * The public instance should be accessible from the internet by Internet Gateway.
+ * The public instance should have access to the private instance.
+ * The private instance should have access to the internet via NAT Gateway.
+ * The private instance should not be accessible from the public internet.
+ */
+
 
 public class VpcSubnetsAndRoutingConfigurationTest extends BaseTest {
   private static final String ALL_ADDRESSES = "0.0.0.0/0";
@@ -32,7 +41,7 @@ public class VpcSubnetsAndRoutingConfigurationTest extends BaseTest {
       .build();
   DescribeRouteTablesResponse privateRouteTables = ec2.describeRouteTables(privateRequest);
   @Test
-  @DisplayName("")
+  @DisplayName("The public instance should be accessible from the internet by Internet Gateway")
   @Tag("vpc")
   @Order(1)
   public void isPublicInstanceAccessibleFromInternetByGateway() {
@@ -45,7 +54,7 @@ public class VpcSubnetsAndRoutingConfigurationTest extends BaseTest {
   }
 
   @Test
-  @DisplayName("")
+  @DisplayName("The private instance should not be accessible from the public internet")
   @Tag("vpc")
   @Order(2)
   public void isPrivateInstanceNotAccessibleFromInternetByGateway() {
@@ -58,7 +67,7 @@ public class VpcSubnetsAndRoutingConfigurationTest extends BaseTest {
   }
 
   @Test
-  @DisplayName("")
+  @DisplayName("The public instance should have access to the private instance")
   @Tag("vpc")
   @Order(3)
   public void isPublicInstanceHasAccessToPrivate() {

@@ -12,13 +12,25 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <includes>
+            <include>${runSuite}</include>
+          </includes>
+        </configuration>
+
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.10.1</version>
+
         <dependencies>
           <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>6.2</version>
+            <version>6.2</version> <!-- Use newer version of ASM -->
           </dependency>
         </dependencies>
       </plugin>
@@ -32,6 +44,7 @@
         <version>${maven-surefire-report-plugin}</version>
       </plugin>
     </plugins>
+
   </reporting>
 
   <dependencies>
@@ -127,10 +140,15 @@
       <artifactId>log4j-core</artifactId>
       <version>${log4j-core-api}</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j}</version>
+    </dependency>
   </dependencies>
 
   <properties>
+    <slf4j>2.0.5</slf4j>
     <log4j-core-api>2.20.0</log4j-core-api>
     <report-portal-logger>5.1.5</report-portal-logger>
     <report-portal>5.1.3</report-portal>
@@ -148,9 +166,7 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <runSuite>**/suiteRunners/TestRunner.class</runSuite>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <runSuite>**/SmokeTestRunner.class</runSuite>
   </properties>
 
 </project>

@@ -23,5 +23,5 @@ jobs:
         run: mvn clean package --batch-mode --no-transfer-progress
 
       - name: Run tests with Maven
-        run: mvn test --batch-mode --no-transfer-progress -Dtest=com.epam.cloudx.suiteRunners.SmokeTestRunner
+        run: mvn clean test
 
