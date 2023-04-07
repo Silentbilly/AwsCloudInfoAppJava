@@ -1,19 +1,11 @@
 package com.epam.cloudx.utils;
 
-
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.epam.cloudx.Exceptions.DuplicationInstanceNameException;
 import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.Instance;
-/*import com.sshtools.client.SshClient;
-import com.sshtools.common.publickey.SshKeyUtils;
-import com.sshtools.common.ssh.SshException;
-import com.sshtools.common.ssh.components.SshKeyPair;*/
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -37,9 +29,8 @@ import software.amazon.awssdk.services.ec2.model.Vpc;
 @UtilityClass
 public class AwsUtils {
 
-  public static Ec2Client createEc2Client(String accessKey, String secretKey) {
-    var credentials = new BasicAWSCredentials(accessKey, secretKey);
-    var region = Regions.EU_CENTRAL_1;
+  public static Ec2Client createEc2Client() {
+
     log.info("Connecting to ec2");
     return Ec2Client.builder()
         .credentialsProvider(DefaultCredentialsProvider.create())
@@ -180,19 +171,4 @@ public class AwsUtils {
       throw new NoSuchElementException(String.format("The subnet tags of %s are empty", vpcSubnetName));
     }
   }
-
-/*    @SneakyThrows
-    public static boolean isSshAccessible(Instance instance, String keyPairFilePath) {
-        final String USER = "user_name";
-        final String HOST = "ec2_public_address";
-        final int PORT = 22;
-        final String PRIVATE_KEY = "/home/aleks/Projects/AwsCloudInfoAppJava/src/main/resources/data/keys/cloudxinfo-eu-central-1.pem";
-        final SshKeyPair pair = SshKeyUtils.getRSAPrivateKeyWithSHA256Signature(new File(PRIVATE_KEY), null);
-        try (SshClient ssh = new SshClient(HOST, PORT, USER, pair)) {
-            ssh.executeCommand("ssh -i \"cloudxinfo-eu-central-1.pem\" ec2-user@ec2-35-158-26-49.eu-central-1.compute.amazonaws.com");
-            return true;
-        } catch (SshException e) {
-            return false; // SSH connection failed
-        }
-    }*/
 }
