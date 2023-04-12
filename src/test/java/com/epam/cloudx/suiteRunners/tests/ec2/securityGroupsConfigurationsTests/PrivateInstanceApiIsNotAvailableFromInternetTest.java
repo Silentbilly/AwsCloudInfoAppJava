@@ -1,14 +1,14 @@
-package com.epam.cloudx.tests.ec2.securityGroupsConfigurationsTests;
+package com.epam.cloudx.suiteRunners.tests.ec2.securityGroupsConfigurationsTests;
 
 import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
-import com.epam.cloudx.tests.BaseTest;
+import com.epam.cloudx.suiteRunners.tests.CloudxInfoBaseTest;
 import com.epam.cloudx.utils.HttpUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class PrivateInstanceApiIsNotAvailableFromInternetTest extends BaseTest {
+public class PrivateInstanceApiIsNotAvailableFromInternetTest extends CloudxInfoBaseTest {
     @Test
     @DisplayName("API for private instance is not available from internet")
     @Tag("private")

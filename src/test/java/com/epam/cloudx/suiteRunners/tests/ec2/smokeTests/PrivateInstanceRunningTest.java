@@ -1,13 +1,13 @@
-package com.epam.cloudx.tests.ec2.smokeTests;
+package com.epam.cloudx.suiteRunners.tests.ec2.smokeTests;
 
-import com.epam.cloudx.tests.BaseTest;
+import com.epam.cloudx.suiteRunners.tests.CloudxInfoBaseTest;
 import com.epam.cloudx.utils.AwsUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class PrivateInstanceRunningTest extends BaseTest {
+public class PrivateInstanceRunningTest extends CloudxInfoBaseTest {
     @Test
     @DisplayName("Private instance is running")
     @Tag("private")
