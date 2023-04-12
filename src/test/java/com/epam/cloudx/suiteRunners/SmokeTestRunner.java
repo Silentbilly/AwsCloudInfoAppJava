@@ -5,7 +5,7 @@ import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
 
 @SelectPackages({"com.epam.cloudx.tests"})
-@IncludeTags("smoke")
+@IncludeTags({"smoke", "s3"})
 @Suite
 public class SmokeTestRunner {
 

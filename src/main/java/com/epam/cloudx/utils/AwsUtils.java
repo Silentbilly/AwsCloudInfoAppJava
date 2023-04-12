@@ -2,10 +2,17 @@ package com.epam.cloudx.utils;
 
 import com.epam.cloudx.Exceptions.DuplicationInstanceNameException;
 import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.Ec2Client;
+import software.amazon.awssdk.services.ec2.model.DescribeSecurityGroupsRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeSubnetsResponse;
 import software.amazon.awssdk.services.ec2.model.Instance;
+import software.amazon.awssdk.services.ec2.model.InstanceNetworkInterface;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -19,7 +26,9 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j;
 
+import software.amazon.awssdk.services.ec2.model.IpPermission;
 import software.amazon.awssdk.services.ec2.model.Reservation;
+import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 import software.amazon.awssdk.services.ec2.model.Subnet;
 import software.amazon.awssdk.services.ec2.model.Tag;
 import software.amazon.awssdk.services.ec2.model.Volume;
@@ -28,6 +37,13 @@ import software.amazon.awssdk.services.ec2.model.Vpc;
 @Log4j
 @UtilityClass
 public class AwsUtils {
+
+  private static final int CONNECTION_TIMEOUT = 3000; // 3 seconds
+  private static final int READ_TIMEOUT = 5000; // 5 seconds
+  private static final Integer PORT_22 = 22;
+  private static final Integer PORT_80 = 80;
+  private static final String HTTP_FROM_INTERNET = "HTTP from Internet";
+  private static final String SSH_FROM_INTERNET = "SSH from Internet";
 
   public static Ec2Client createEc2Client() {
 
@@ -169,6 +185,83 @@ public class AwsUtils {
       return subnetTypeTag.value();
     } else {
       throw new NoSuchElementException(String.format("The subnet tags of %s are empty", vpcSubnetName));
+    }
+  }
+
+  public static boolean isAppInPublicSubnet(Ec2Client ec2, String vpcSubnetName) {
+    Instance instance = getInstanceByName(ec2, vpcSubnetName);
+    InstanceNetworkInterface networkInterface = instance.networkInterfaces().get(0);
+
+    String subnetId = networkInterface.subnetId();
+
+    // Retrieve information about the subnet
+    DescribeSubnetsRequest subnetRequest = DescribeSubnetsRequest.builder()
+        .subnetIds(subnetId)
+        .build();
+    DescribeSubnetsResponse subnetResult = ec2.describeSubnets(subnetRequest);
+    Subnet subnet = subnetResult.subnets().get(0);
+    return subnet.mapPublicIpOnLaunch();
+  }
+
+  public static boolean isInstanceAccessibleByPublicIpAddress(Ec2Client ec2, String instanceName) {
+    Instance instance = getInstanceByName(ec2, instanceName);
+    String publicIpAddress = instance.publicIpAddress();
+    return isAccessible(publicIpAddress);
+  }
+
+  public static boolean isInstanceAccessibleByFqdn(Ec2Client ec2, String instanceName) {
+    Instance instance = getInstanceByName(ec2, instanceName);
+    String publicDnsName = instance.publicDnsName();
+    return isAccessible(publicDnsName);
+  }
+
+  public static boolean isInstanceAccessibleBySsh(Ec2Client ec2, String instanceName) {
+    IpPermission ipPermission = getIpPermissionsByPort(ec2, instanceName, PORT_22);
+    if (ipPermission != null) {
+      return ipPermission.ipRanges().get(0).description().equals(SSH_FROM_INTERNET);
+    } else {
+      throw new NoSuchElementException("No such IP range");
+    }
+  }
+  public static boolean isInstanceAccessibleByHttp(Ec2Client ec2, String instanceName) {
+    IpPermission ipPermission = getIpPermissionsByPort(ec2, instanceName, PORT_80);
+    if (ipPermission != null) {
+      return ipPermission.ipRanges().get(0).description().equals(HTTP_FROM_INTERNET);
+    } else {
+      throw new NoSuchElementException("No such IP range");
+    }
+  }
+  private static IpPermission getIpPermissionsByPort(Ec2Client ec2, String instanceName, Integer port) {
+    Instance instance = getInstanceByName(ec2, instanceName);
+
+    String securityGroupId = instance.securityGroups().get(0).groupId();
+
+    DescribeSecurityGroupsRequest describeSecurityGroupsRequest = DescribeSecurityGroupsRequest.builder()
+        .groupIds(securityGroupId)
+        .build();
+    SecurityGroup securityGroup = ec2.describeSecurityGroups(describeSecurityGroupsRequest)
+        .securityGroups().get(0);
+
+    List<IpPermission> ipPermissions = securityGroup.ipPermissions();
+    return ipPermissions
+        .stream()
+        .filter(Objects::nonNull)
+        .filter(s -> s.fromPort()
+            .equals(port)).findAny()
+        .orElse(null);
+  }
+
+  private static boolean isAccessible(String url) {
+    try {
+      HttpURLConnection connection = (HttpURLConnection) new URL("http://" + url + "/api/ui").openConnection();
+      connection.setConnectTimeout(CONNECTION_TIMEOUT);
+      connection.setReadTimeout(READ_TIMEOUT);
+      connection.setRequestMethod("HEAD");
+      int responseCode = connection.getResponseCode();
+      return (200 <= responseCode && responseCode <= 399);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
     }
   }
 }
