@@ -1,7 +1,7 @@
-package com.epam.cloudx.tests.ec2.securityGroupsConfigurationsTests;
+package com.epam.cloudx.suiteRunners.tests.ec2.securityGroupsConfigurationsTests;
 
 import com.epam.cloudx.objects.AppInfo;
-import com.epam.cloudx.tests.BaseTest;
+import com.epam.cloudx.suiteRunners.tests.CloudxInfoBaseTest;
 import com.epam.cloudx.utils.HttpUtils;
 import com.epam.cloudx.utils.JsonUtils;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-public class PublicInstanceApplicationFunctionalValidationTest extends BaseTest {
+public class PublicInstanceApplicationFunctionalValidationTest extends CloudxInfoBaseTest {
 
   @Test
   @DisplayName("Public instance application functional validation")

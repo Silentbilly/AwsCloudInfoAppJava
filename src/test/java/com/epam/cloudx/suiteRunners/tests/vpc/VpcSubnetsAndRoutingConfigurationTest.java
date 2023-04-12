@@ -1,10 +1,10 @@
-package com.epam.cloudx.tests.vpc;
+package com.epam.cloudx.suiteRunners.tests.vpc;
 
 
+import com.epam.cloudx.suiteRunners.tests.CloudxInfoBaseTest;
 import software.amazon.awssdk.services.ec2.model.DescribeRouteTablesRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeRouteTablesResponse;
 import software.amazon.awssdk.services.ec2.model.Filter;
-import com.epam.cloudx.tests.BaseTest;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ import software.amazon.awssdk.services.ec2.model.RouteTable;
  */
 
 
-public class VpcSubnetsAndRoutingConfigurationTest extends BaseTest {
+public class VpcSubnetsAndRoutingConfigurationTest extends CloudxInfoBaseTest {
   private static final String ALL_ADDRESSES = "0.0.0.0/0";
   DescribeRouteTablesRequest publicRequest = DescribeRouteTablesRequest.builder()
       .filters(Filter.builder()

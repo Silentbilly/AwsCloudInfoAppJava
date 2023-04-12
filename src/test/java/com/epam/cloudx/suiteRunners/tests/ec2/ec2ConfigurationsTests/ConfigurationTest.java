@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.ec2.ec2ConfigurationsTests;
+package com.epam.cloudx.suiteRunners.tests.ec2.ec2ConfigurationsTests;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static software.amazon.awssdk.services.ec2.model.UnlimitedSupportedInstanceFamily.T2;
 
-import com.epam.cloudx.tests.BaseTest;
+import com.epam.cloudx.suiteRunners.tests.CloudxInfoBaseTest;
 import com.epam.cloudx.utils.AwsUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ import software.amazon.awssdk.services.ec2.model.Instance;
  */
 
 @Log4j
-public class ConfigurationTest extends BaseTest {
+public class ConfigurationTest extends CloudxInfoBaseTest {
 
   private final Instance publicInstance = AwsUtils.getInstanceByName(ec2, publicInstanceName);
   private final Instance privateInstance = AwsUtils.getInstanceByName(ec2, privateInstanceName);

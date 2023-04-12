@@ -1,4 +1,4 @@
-package com.epam.cloudx.tests.vpc;
+package com.epam.cloudx.suiteRunners.tests.vpc;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-import com.epam.cloudx.tests.BaseTest;
+import com.epam.cloudx.suiteRunners.tests.CloudxInfoBaseTest;
 import com.epam.cloudx.utils.AwsUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
  * VPC tags: Name, cloudx
  */
 @Log4j
-public class VpcConfigurationTest extends BaseTest {
+public class VpcConfigurationTest extends CloudxInfoBaseTest {
 
   private static final String EXPECTED_PUBLIC_VPC_SUBNET_TYPE = "Public";
   private static final String EXPECTED_PRIVATE_VPC_SUBNET_TYPE = "Private";
