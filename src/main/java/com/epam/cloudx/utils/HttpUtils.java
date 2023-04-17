@@ -12,6 +12,8 @@ import software.amazon.awssdk.services.ec2.Ec2Client;
 @UtilityClass
 public class HttpUtils {
   private final String HTTP = "http://";
+  private final String IMAGE_ID = "image_id";
+
   public static Response getPublicAppInfo(Ec2Client ec2, String instanceName) {
     return given().relaxedHTTPSValidation()
         .log().all()
@@ -68,7 +70,7 @@ public class HttpUtils {
         .log().all()
         .baseUri(HTTP + AwsUtils.getPublicIpAddressByName(ec2, instanceName))
         .contentType(ContentType.JSON)
-        .pathParam("image_id", id)
+        .pathParam(IMAGE_ID, id)
         .when()
         .get(ApiGateEndpoints.S3_BUCKET_GET_IMAGE_BY_ID.getValue())
         .then()
@@ -82,7 +84,7 @@ public class HttpUtils {
         .log().all()
         .baseUri(HTTP + AwsUtils.getPublicIpAddressByName(ec2, instanceName))
         .contentType(ContentType.JSON)
-        .pathParam("image_id", id)
+        .pathParam(IMAGE_ID, id)
         .when()
         .delete(ApiGateEndpoints.S3_BUCKET_DELETE_IMAGE_BY_ID.getValue())
         .then()

@@ -8,11 +8,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class PrivateInstanceNotAvailableFromInternetTest extends CloudxInfoBaseTest {
+class PrivateInstanceNotAvailableFromInternetTest extends CloudxInfoBaseTest {
     @Test
     @DisplayName("Private instance is not available from internet")
     @Tag("private")
-    public void privateInstanceIsNotAvailableFromInternet() {
+    void privateInstanceIsNotAvailableFromInternet() {
         Assertions.assertThrows(ServiceUnavailableFromPublicException.class,
                 () -> AwsUtils.getPublicIpAddressByName(ec2, privateInstanceName));
     }
