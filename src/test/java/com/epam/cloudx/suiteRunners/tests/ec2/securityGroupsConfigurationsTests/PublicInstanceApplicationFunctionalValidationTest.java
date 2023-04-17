@@ -1,6 +1,6 @@
 package com.epam.cloudx.suiteRunners.tests.ec2.securityGroupsConfigurationsTests;
 
-import com.epam.cloudx.objects.AppInfo;
+import com.epam.cloudx.objects.cloudxinfo.AppInfo;
 import com.epam.cloudx.suiteRunners.tests.CloudxInfoBaseTest;
 import com.epam.cloudx.utils.HttpUtils;
 import com.epam.cloudx.utils.JsonUtils;

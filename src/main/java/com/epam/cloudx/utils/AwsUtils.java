@@ -5,6 +5,8 @@ import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import software.amazon.awssdk.auth.credentials.AwsCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.Ec2Client;
@@ -33,6 +35,10 @@ import software.amazon.awssdk.services.ec2.model.Subnet;
 import software.amazon.awssdk.services.ec2.model.Tag;
 import software.amazon.awssdk.services.ec2.model.Volume;
 import software.amazon.awssdk.services.ec2.model.Vpc;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 @Log4j
 @UtilityClass
@@ -263,5 +269,33 @@ public class AwsUtils {
       e.printStackTrace();
       return false;
     }
+  }
+
+  public static boolean isS3fromBucketListAccessibleByIamRole(S3Client s3Client, List<Bucket> bucketList) {
+    boolean accessResult = false;
+    for (Bucket bucket : bucketList) {
+      String bucketName = bucket.name();
+      log.info("Checking access to bucket: " + bucketName);
+
+      // Call listObjectsV2() to check access to bucket
+      ListObjectsV2Response result = s3Client.listObjectsV2(builder -> builder.bucket(bucketName));
+      List<S3Object> objects = result.contents();
+
+      // Print the current IAM role being used by the client
+      AwsCredentialsProvider credentialsProvider = DefaultCredentialsProvider.create();
+      AwsCredentials credentials = credentialsProvider.resolveCredentials();
+      String accessKeyId = credentials.accessKeyId();
+      log.info("Using IAM role: " + accessKeyId);
+
+      // Check response for expected objects or data
+      if (!objects.isEmpty()) {
+        accessResult = true;
+        log.info("User with IAM role: " + accessKeyId + " has access to bucket: " + bucketName);
+      } else {
+        accessResult = false;
+        break;
+      }
+    }
+    return accessResult;
   }
 }
