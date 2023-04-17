@@ -62,4 +62,46 @@ public class HttpUtils {
         .extract()
         .response();
   }
+
+  public static Response getImageById(Ec2Client ec2, String instanceName, Integer id) {
+    return given().relaxedHTTPSValidation()
+        .log().all()
+        .baseUri(HTTP + AwsUtils.getPublicIpAddressByName(ec2, instanceName))
+        .contentType(ContentType.JSON)
+        .pathParam("image_id", id)
+        .when()
+        .get(ApiGateEndpoints.S3_BUCKET_GET_IMAGE_BY_ID.getValue())
+        .then()
+        .log().all()
+        .extract()
+        .response();
+  }
+
+  public static Response deleteImageById(Ec2Client ec2, String instanceName, Integer id) {
+    return given().relaxedHTTPSValidation()
+        .log().all()
+        .baseUri(HTTP + AwsUtils.getPublicIpAddressByName(ec2, instanceName))
+        .contentType(ContentType.JSON)
+        .pathParam("image_id", id)
+        .when()
+        .delete(ApiGateEndpoints.S3_BUCKET_DELETE_IMAGE_BY_ID.getValue())
+        .then()
+        .log().all()
+        .extract()
+        .response();
+  }
+
+  public static Response getImageInfoById(Ec2Client ec2, String instanceName, Integer id) {
+    return given().relaxedHTTPSValidation()
+        .log().all()
+        .baseUri(HTTP + AwsUtils.getPublicIpAddressByName(ec2, instanceName))
+        .contentType(ContentType.JSON)
+        .pathParam("image_id", id)
+        .when()
+        .get(ApiGateEndpoints.S3_BUCKET_GET_IMAGE_INFO_BY_ID.getValue())
+        .then()
+        .log().all()
+        .extract()
+        .response();
+  }
 }
