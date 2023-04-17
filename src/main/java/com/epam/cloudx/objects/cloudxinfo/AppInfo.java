@@ -1,4 +1,4 @@
-package com.epam.cloudx.objects;
+package com.epam.cloudx.objects.cloudxinfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
