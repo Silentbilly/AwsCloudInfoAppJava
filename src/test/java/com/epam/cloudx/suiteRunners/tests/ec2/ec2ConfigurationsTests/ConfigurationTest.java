@@ -28,7 +28,7 @@ import software.amazon.awssdk.services.ec2.model.Instance;
  */
 
 @Log4j
-public class ConfigurationTest extends CloudxInfoBaseTest {
+class ConfigurationTest extends CloudxInfoBaseTest {
 
   private final Instance publicInstance = AwsUtils.getInstanceByName(ec2, publicInstanceName);
   private final Instance privateInstance = AwsUtils.getInstanceByName(ec2, privateInstanceName);
@@ -41,7 +41,7 @@ public class ConfigurationTest extends CloudxInfoBaseTest {
   @Test
   @DisplayName("Public EC2 instance should have the following configuration")
   @Tag("configuration")
-  public void checkPublicInstanceType() {
+  void checkPublicInstanceType() {
     String actualInstanceType = publicInstance.instanceType().toString();
     boolean isExpectedTagsPresent = AwsUtils.isEc2TagsPresent(publicInstance, expectedTagsList);
     Integer actualDeviceSize = AwsUtils.getVolumeSizeByInstanceName(ec2, publicInstanceName);
@@ -62,7 +62,7 @@ public class ConfigurationTest extends CloudxInfoBaseTest {
   @Test
   @DisplayName("Private EC2 instance should have the following configuration")
   @Tag("configuration")
-  public void checkPrivateInstanceType() {
+  void checkPrivateInstanceType() {
     String actualInstanceType = privateInstance.instanceType().toString();
     boolean isExpectedTagsPresent = AwsUtils.isEc2TagsPresent(privateInstance, expectedTagsList);
     Integer actualDeviceSize = AwsUtils.getVolumeSizeByInstanceName(ec2, privateInstanceName);

@@ -7,7 +7,10 @@ env:
 on:
   push:
     branches:
-      - ${{ github.ref }}
+      - '*'
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
   build-and-test:
