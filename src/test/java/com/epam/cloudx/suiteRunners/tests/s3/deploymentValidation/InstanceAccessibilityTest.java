@@ -7,10 +7,12 @@ import com.epam.cloudx.suiteRunners.tests.CloudxImageBaseTest;
 import com.epam.cloudx.utils.AwsUtils;
 import java.util.List;
 import lombok.extern.log4j.Log4j;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import software.amazon.awssdk.services.s3.model.Bucket;
 
 /**
@@ -21,7 +23,13 @@ import software.amazon.awssdk.services.s3.model.Bucket;
  */
 
 @Log4j
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class InstanceAccessibilityTest extends CloudxImageBaseTest {
+
+  @AfterAll
+  void closeS3Client() {
+    s3Client.close();
+  }
 
   @Test
   @DisplayName("The application is deployed in the public subnet")
