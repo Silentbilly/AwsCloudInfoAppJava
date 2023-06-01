@@ -2,19 +2,17 @@ package com.epam.cloudx.utils;
 
 import com.epam.cloudx.Exceptions.DuplicationInstanceNameException;
 import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
+import com.epam.cloudx.InstanceTypes;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import software.amazon.awssdk.auth.credentials.AwsCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DescribeSecurityGroupsRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeSecurityGroupsResponse;
 import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
-import software.amazon.awssdk.services.ec2.model.DescribeSubnetsResponse;
 import software.amazon.awssdk.services.ec2.model.Instance;
-import software.amazon.awssdk.services.ec2.model.InstanceNetworkInterface;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -33,8 +31,13 @@ import software.amazon.awssdk.services.ec2.model.Reservation;
 import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 import software.amazon.awssdk.services.ec2.model.Subnet;
 import software.amazon.awssdk.services.ec2.model.Tag;
-import software.amazon.awssdk.services.ec2.model.Volume;
 import software.amazon.awssdk.services.ec2.model.Vpc;
+import software.amazon.awssdk.services.rds.RdsClient;
+import software.amazon.awssdk.services.rds.model.DBInstance;
+import software.amazon.awssdk.services.rds.model.DBSubnetGroup;
+import software.amazon.awssdk.services.rds.model.DescribeDbInstancesRequest;
+import software.amazon.awssdk.services.rds.model.DescribeDbSubnetGroupsRequest;
+import software.amazon.awssdk.services.rds.model.DescribeDbSubnetGroupsResponse;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
@@ -105,18 +108,25 @@ public class AwsUtils {
     }
   }
 
-  public static boolean isEc2TagsPresent(Instance instance, List<String> tags) {
+  public static boolean areEc2TagsPresent(Instance instance, List<String> tags) {
     return new HashSet<>(instance.tags()
         .stream()
         .map(Tag::key)
         .toList()).containsAll(tags);
   }
 
+  public static boolean areDbInstanceTagsPresent(DBInstance dbInstance, List<String> tags) {
+    return new HashSet<>(dbInstance.tagList()
+        .stream()
+        .map(software.amazon.awssdk.services.rds.model.Tag::key)
+        .toList()).containsAll(tags);
+  }
+
   @SneakyThrows
   public static Integer getVolumeSizeByInstanceName(Ec2Client ec2, String instanceName) {
-    List<Volume> volumesList = ec2.describeVolumes().volumes();
+    var volumesList = ec2.describeVolumes().volumes();
     String instanceId = getInstanceByName(ec2, instanceName).instanceId();
-    Volume volume = volumesList
+    var volume = volumesList
         .stream()
         .filter(Objects::nonNull)
         .filter(s -> s.attachments().toString().contains(instanceId)).findAny()
@@ -131,7 +141,7 @@ public class AwsUtils {
   public static boolean isInstanceHasPublicIp(Ec2Client ec2, String instanceName) {
     try {
       String address = AwsUtils.getPublicIpAddressByName(ec2, instanceName);
-      InetAddress inetAddress = InetAddress.getByName(address);
+      var inetAddress = InetAddress.getByName(address);
       return inetAddress instanceof Inet4Address || inetAddress instanceof Inet6Address;
     } catch (UnknownHostException e) {
       return false;
@@ -140,8 +150,8 @@ public class AwsUtils {
 
   public static Vpc getVpcByName(Ec2Client ec2, String vpcName) {
     // Retrieve information about all VPCs in your account
-    List<Vpc> vpcList = ec2.describeVpcs().vpcs();
-    Vpc vpc = vpcList
+    var vpcList = ec2.describeVpcs().vpcs();
+    var vpc = vpcList
         .stream()
         .filter(Objects::nonNull)
         .filter(s -> s.toString().contains(vpcName)).findAny()
@@ -165,8 +175,8 @@ public class AwsUtils {
   }
 
   public static Subnet getSubnetByName(Ec2Client ec2, String vpcSubnetName) {
-    List<Subnet> subnets = ec2.describeSubnets().subnets();
-    Subnet subnet = subnets
+    var subnets = ec2.describeSubnets().subnets();
+    var subnet = subnets
         .stream()
         .filter(Objects::nonNull)
         .filter(s -> s.toString().contains(vpcSubnetName))
@@ -180,8 +190,8 @@ public class AwsUtils {
   }
 
   public static String getVpcSubnetTypeByName(Ec2Client ec2, String vpcSubnetName) {
-    Subnet subnet = getSubnetByName(ec2, vpcSubnetName);
-    Tag subnetTypeTag = subnet.tags()
+    var subnet = getSubnetByName(ec2, vpcSubnetName);
+    var subnetTypeTag = subnet.tags()
         .stream()
         .filter(Objects::nonNull)
         .filter(s -> s.key().contains("subnet-type"))
@@ -195,34 +205,34 @@ public class AwsUtils {
   }
 
   public static boolean isAppInPublicSubnet(Ec2Client ec2, String vpcSubnetName) {
-    Instance instance = getInstanceByName(ec2, vpcSubnetName);
-    InstanceNetworkInterface networkInterface = instance.networkInterfaces().get(0);
+    var instance = getInstanceByName(ec2, vpcSubnetName);
+    var networkInterface = instance.networkInterfaces().get(0);
 
     String subnetId = networkInterface.subnetId();
 
     // Retrieve information about the subnet
-    DescribeSubnetsRequest subnetRequest = DescribeSubnetsRequest.builder()
+    var subnetRequest = DescribeSubnetsRequest.builder()
         .subnetIds(subnetId)
         .build();
-    DescribeSubnetsResponse subnetResult = ec2.describeSubnets(subnetRequest);
-    Subnet subnet = subnetResult.subnets().get(0);
+    var subnetResult = ec2.describeSubnets(subnetRequest);
+    var subnet = subnetResult.subnets().get(0);
     return subnet.mapPublicIpOnLaunch();
   }
 
   public static boolean isInstanceAccessibleByPublicIpAddress(Ec2Client ec2, String instanceName) {
-    Instance instance = getInstanceByName(ec2, instanceName);
+    var instance = getInstanceByName(ec2, instanceName);
     String publicIpAddress = instance.publicIpAddress();
     return isAccessible(publicIpAddress);
   }
 
   public static boolean isInstanceAccessibleByFqdn(Ec2Client ec2, String instanceName) {
-    Instance instance = getInstanceByName(ec2, instanceName);
+    var instance = getInstanceByName(ec2, instanceName);
     String publicDnsName = instance.publicDnsName();
     return isAccessible(publicDnsName);
   }
 
   public static boolean isInstanceAccessibleBySsh(Ec2Client ec2, String instanceName) {
-    IpPermission ipPermission = getIpPermissionsByPort(ec2, instanceName, PORT_22);
+    var ipPermission = getIpPermissionsByPort(ec2, instanceName, PORT_22);
     if (ipPermission != null) {
       return ipPermission.ipRanges().get(0).description().equals(SSH_FROM_INTERNET);
     } else {
@@ -230,7 +240,7 @@ public class AwsUtils {
     }
   }
   public static boolean isInstanceAccessibleByHttp(Ec2Client ec2, String instanceName) {
-    IpPermission ipPermission = getIpPermissionsByPort(ec2, instanceName, PORT_80);
+    var ipPermission = getIpPermissionsByPort(ec2, instanceName, PORT_80);
     if (ipPermission != null) {
       return ipPermission.ipRanges().get(0).description().equals(HTTP_FROM_INTERNET);
     } else {
@@ -242,13 +252,13 @@ public class AwsUtils {
 
     String securityGroupId = instance.securityGroups().get(0).groupId();
 
-    DescribeSecurityGroupsRequest describeSecurityGroupsRequest = DescribeSecurityGroupsRequest.builder()
+    var describeSecurityGroupsRequest = DescribeSecurityGroupsRequest.builder()
         .groupIds(securityGroupId)
         .build();
-    SecurityGroup securityGroup = ec2.describeSecurityGroups(describeSecurityGroupsRequest)
+    var securityGroup = ec2.describeSecurityGroups(describeSecurityGroupsRequest)
         .securityGroups().get(0);
 
-    List<IpPermission> ipPermissions = securityGroup.ipPermissions();
+    var ipPermissions = securityGroup.ipPermissions();
     return ipPermissions
         .stream()
         .filter(Objects::nonNull)
@@ -282,8 +292,8 @@ public class AwsUtils {
       List<S3Object> objects = result.contents();
 
       // Print the current IAM role being used by the client
-      AwsCredentialsProvider credentialsProvider = DefaultCredentialsProvider.create();
-      AwsCredentials credentials = credentialsProvider.resolveCredentials();
+      var credentialsProvider = DefaultCredentialsProvider.create();
+      var credentials = credentialsProvider.resolveCredentials();
       String accessKeyId = credentials.accessKeyId();
       log.info("Using IAM role: " + accessKeyId);
 
@@ -297,5 +307,61 @@ public class AwsUtils {
       }
     }
     return accessResult;
+  }
+
+  public static DBInstance getDbInstanceByNamePart(RdsClient rdsClient, String dbName) {
+    // Build the request to describe all RDS instances
+    var request = DescribeDbInstancesRequest.builder().build();
+
+    // Call the RDS client to retrieve information about all RDS instances
+    var response = rdsClient.describeDBInstances(request);
+
+    // Filter the RDS instances to find the one whose name contains the given string
+    return response.dbInstances().stream()
+        .filter(Objects::nonNull)
+        .filter(instance -> instance.dbInstanceIdentifier().contains(dbName))
+        .findFirst()
+        .orElse(null);
+  }
+  public static boolean areAllDbAppSubnetsPrivate(Ec2Client ec2, RdsClient rdsClient, String dbName) {
+    var subnets = getDbInstanceByNamePart(rdsClient, dbName).dbSubnetGroup().subnets();
+
+    for (var subnet : subnets) {
+      var subnetRequest = DescribeSubnetsRequest.builder()
+          .subnetIds(subnet.subnetIdentifier())
+          .build();
+      var subnetResult = ec2.describeSubnets(subnetRequest);
+      var subnetDetails = subnetResult.subnets().get(0);
+
+      String subnetType = subnetDetails.tags().stream()
+          .filter(Objects::nonNull)
+          .filter(s -> s.key().equals("aws-cdk:subnet-type"))
+          .findAny()
+          .map(Tag::value)
+          .orElse(null);
+
+      if (subnetType.equals(InstanceTypes.PUBLIC.getValue())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public static void isRdsAccessibleFromAppPublic(Ec2Client ec2, RdsClient rdsClient, String dbName) {
+    var dbInstance = getDbInstanceByNamePart(rdsClient, dbName);
+    String subnetGroupId = dbInstance.dbSubnetGroup().toString();
+    System.out.println(subnetGroupId);
+    System.out.println(dbInstance.vpcSecurityGroups().get(0).vpcSecurityGroupId());
+    System.out.println(dbInstance.vpcSecurityGroups().size());
+
+    String groupId = dbInstance.vpcSecurityGroups().get(0).vpcSecurityGroupId();
+
+    DescribeSecurityGroupsRequest sgRequest = DescribeSecurityGroupsRequest.builder()
+        .groupIds(groupId)
+        .build();
+    DescribeSecurityGroupsResponse sgResult = ec2.describeSecurityGroups(sgRequest);
+    SecurityGroup securityGroup = sgResult.securityGroups().get(0);
+
+    System.out.println(securityGroup.ipPermissions());
   }
 }

@@ -43,7 +43,7 @@ class ConfigurationTest extends CloudxInfoBaseTest {
   @Tag("configuration")
   void checkPublicInstanceType() {
     String actualInstanceType = publicInstance.instanceType().toString();
-    boolean isExpectedTagsPresent = AwsUtils.isEc2TagsPresent(publicInstance, expectedTagsList);
+    boolean isExpectedTagsPresent = AwsUtils.areEc2TagsPresent(publicInstance, expectedTagsList);
     Integer actualDeviceSize = AwsUtils.getVolumeSizeByInstanceName(ec2, publicInstanceName);
     String actualOs = publicInstance.platformDetails();
     boolean isInstanceHavePublicIpAddress = AwsUtils.isInstanceHasPublicIp(ec2, publicInstanceName);
@@ -64,7 +64,7 @@ class ConfigurationTest extends CloudxInfoBaseTest {
   @Tag("configuration")
   void checkPrivateInstanceType() {
     String actualInstanceType = privateInstance.instanceType().toString();
-    boolean isExpectedTagsPresent = AwsUtils.isEc2TagsPresent(privateInstance, expectedTagsList);
+    boolean isExpectedTagsPresent = AwsUtils.areEc2TagsPresent(privateInstance, expectedTagsList);
     Integer actualDeviceSize = AwsUtils.getVolumeSizeByInstanceName(ec2, privateInstanceName);
     String actualOs = privateInstance.platformDetails();
     boolean isInstanceHavePublicIpAddress = AwsUtils.isInstanceHasPublicIp(ec2, privateInstanceName);
