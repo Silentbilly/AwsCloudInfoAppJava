@@ -119,9 +119,15 @@
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3</artifactId>
       <version>${aws-sdk}</version>
-    </dependency>    <dependency>
+    </dependency>
+    <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>iam</artifactId>
+      <version>${aws-sdk}</version>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>rds</artifactId>
       <version>${aws-sdk}</version>
     </dependency>
     <dependency>
