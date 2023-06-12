@@ -13,13 +13,13 @@ import com.epam.cloudx.utils.JsonUtils;
 import java.io.File;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,10 +33,9 @@ class AppFunctionalValidationTest extends CloudxImageBaseTest {
 
   @BeforeAll
   void setup() {
-
     var response = HttpUtils.getAllImagesMetadata(ec2, publicInstanceName);
     var actualResponse = JsonUtils.readJsonAsList(response, S3UploadFileResponse[].class);
-    if(!actualResponse.isEmpty()) {
+    if (!actualResponse.isEmpty()) {
       actualResponse.forEach(s -> HttpUtils.deleteImageById(ec2, publicInstanceName, s.id()));
     }
   }
@@ -46,7 +45,6 @@ class AppFunctionalValidationTest extends CloudxImageBaseTest {
   @Tag("s3")
   @Order(1)
   void uploadFileToS3() {
-
     var response = HttpUtils.uploadImageToS3Bucket(ec2, publicInstanceName, filePath);
     var actualResponse = JsonUtils.readJsonAsObject(response, S3UploadFileResponse.class);
     imageId = actualResponse.id();
@@ -58,7 +56,6 @@ class AppFunctionalValidationTest extends CloudxImageBaseTest {
   @Tag("s3")
   @Order(2)
   void viewUploadedImages() {
-
     var response = HttpUtils.getAllImagesMetadata(ec2, publicInstanceName);
     var actualResponse = JsonUtils.readJsonAsList(response, S3UploadFileResponse[].class);
     assertNotEquals(0, actualResponse.size());
@@ -71,7 +68,6 @@ class AppFunctionalValidationTest extends CloudxImageBaseTest {
   @Tag("s3")
   @Order(3)
   void downloadImage(Integer imageId) {
-
     var response = HttpUtils.getImageById(ec2, publicInstanceName, imageId);
     byte[] expectedFile = FileUtils.readFileToByteArray(new File(filePath));
     byte[] actualResponse = response.asByteArray();
@@ -86,14 +82,12 @@ class AppFunctionalValidationTest extends CloudxImageBaseTest {
   @Tag("s3")
   @Order(4)
   void deleteImage(Integer imageId) {
-
     HttpUtils.deleteImageById(ec2, publicInstanceName, imageId);
     var response = HttpUtils.getImageInfoById(ec2, publicInstanceName, imageId);
     assertEquals(response.getStatusCode(), ResponseCodes.NOT_FOUND.getValue());
   }
 
   static Stream<Integer> getImageId() {
-
     return Stream.of(AppFunctionalValidationTest.imageId);
   }
 }
