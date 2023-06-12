@@ -122,12 +122,22 @@
     </dependency>
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
-      <artifactId>iam</artifactId>
+      <artifactId>sns</artifactId>
+      <version>${aws-sdk}</version>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>sqs</artifactId>
       <version>${aws-sdk}</version>
     </dependency>
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>rds</artifactId>
+      <version>${aws-sdk}</version>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>iam</artifactId>
       <version>${aws-sdk}</version>
     </dependency>
     <dependency>

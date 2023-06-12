@@ -42,6 +42,18 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
+import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sns.model.ListSubscriptionsByTopicRequest;
+import software.amazon.awssdk.services.sns.model.ListSubscriptionsByTopicResponse;
+import software.amazon.awssdk.services.sns.model.ListTopicsRequest;
+import software.amazon.awssdk.services.sns.model.ListTopicsResponse;
+import software.amazon.awssdk.services.sns.model.Subscription;
+import software.amazon.awssdk.services.sns.model.Topic;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.GetQueueAttributesRequest;
+import software.amazon.awssdk.services.sqs.model.GetQueueAttributesResponse;
+import software.amazon.awssdk.services.sqs.model.ListQueuesRequest;
+import software.amazon.awssdk.services.sqs.model.ListQueuesResponse;
 
 @Log4j
 @UtilityClass
@@ -55,7 +67,6 @@ public class AwsUtils {
   private static final String SSH_FROM_INTERNET = "SSH from Internet";
 
   public static Ec2Client createEc2Client() {
-
     log.info("Connecting to ec2");
     return Ec2Client.builder()
         .credentialsProvider(DefaultCredentialsProvider.create())
@@ -364,4 +375,23 @@ public class AwsUtils {
 
     System.out.println(securityGroup.ipPermissions());
   }
+
+  public static List<Topic> getListOfSnsTopicsArn(SnsClient snsClient) {
+    ListTopicsRequest request = ListTopicsRequest.builder().build();
+    log.info("Getting list of all SNS topics");
+    return snsClient.listTopics(request).topics();
+  }
+
+  public static List<String> getListOfSqsQueues(SqsClient sqsClient) {
+    ListQueuesRequest request = ListQueuesRequest.builder().build();
+    log.info("Getting list of SQS urls");
+    return sqsClient.listQueues(request).queueUrls();
+  }
+
+/*  public static List<Subscription> getListOfSubscriptionsToTopic(SnsClient snsClient) {
+    ListSubscriptionsByTopicRequest request = ListSubscriptionsByTopicRequest.builder()
+        .topicArn(getFirstSnsTopicArn(snsClient))
+        .build();
+    return snsClient.listSubscriptionsByTopic(request).subscriptions();
+  }*/
 }
