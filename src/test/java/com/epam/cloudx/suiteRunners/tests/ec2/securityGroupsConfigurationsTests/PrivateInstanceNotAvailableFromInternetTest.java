@@ -1,6 +1,6 @@
 package com.epam.cloudx.suiteRunners.tests.ec2.securityGroupsConfigurationsTests;
 
-import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
+import com.epam.cloudx.exceptions.ServiceUnavailableFromPublicException;
 import com.epam.cloudx.suiteRunners.tests.CloudxInfoBaseTest;
 import com.epam.cloudx.utils.AwsUtils;
 import org.junit.jupiter.api.Assertions;

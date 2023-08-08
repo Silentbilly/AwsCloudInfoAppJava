@@ -1,4 +1,4 @@
-package com.epam.cloudx.Exceptions;
+package com.epam.cloudx.exceptions;
 
 import java.net.UnknownHostException;
 

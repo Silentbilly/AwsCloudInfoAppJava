@@ -1,7 +1,7 @@
 package com.epam.cloudx.utils;
 
-import com.epam.cloudx.Exceptions.DuplicationInstanceNameException;
-import com.epam.cloudx.Exceptions.ServiceUnavailableFromPublicException;
+import com.epam.cloudx.exceptions.DuplicationInstanceNameException;
+import com.epam.cloudx.exceptions.ServiceUnavailableFromPublicException;
 import com.epam.cloudx.InstanceTypes;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -34,10 +34,7 @@ import software.amazon.awssdk.services.ec2.model.Tag;
 import software.amazon.awssdk.services.ec2.model.Vpc;
 import software.amazon.awssdk.services.rds.RdsClient;
 import software.amazon.awssdk.services.rds.model.DBInstance;
-import software.amazon.awssdk.services.rds.model.DBSubnetGroup;
 import software.amazon.awssdk.services.rds.model.DescribeDbInstancesRequest;
-import software.amazon.awssdk.services.rds.model.DescribeDbSubnetGroupsRequest;
-import software.amazon.awssdk.services.rds.model.DescribeDbSubnetGroupsResponse;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
