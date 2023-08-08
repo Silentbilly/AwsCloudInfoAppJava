@@ -1,4 +1,4 @@
-package com.epam.cloudx.Exceptions;
+package com.epam.cloudx.exceptions;
 
 public class DuplicationInstanceNameException extends Exception {
 
